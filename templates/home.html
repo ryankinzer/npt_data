@@ -1,0 +1,46 @@
+<h1>This is home.</h1>
+
+{% if user.is_authenticated %}
+  Hi {{ user.username }}!
+  <p><a href="{% url 'logout' %}">Log Out</a></p>
+
+{% if object_list %}
+<table>
+    <tr>
+        <th>pk</th>     
+        <th>Name</th>
+        <th>Age</th>
+        <th>Location</th>
+        <th>Created By</th>
+        <th>Created At</th>
+        <th>Updated By</th>
+        <th>Effective Date</th>
+        <th>Status</th>
+        <th>Edit</th>
+    </tr>
+    {% for i in object_list %}
+    <tr>
+        <td>{{ i.pk }}</td>
+        <td>{{ i.name }}</td>
+        <td>{{ i.age }}</td>
+        <td>{{ i.location }}</td>
+        <td>{{ i.created_by }}</td>
+        <td>{{ i.created_at }}</td>
+        <td>{{ i.updated_by }}</td>
+        <td>{{ i.effective_date }}</td>
+        <td>{{ i.status }}</td>
+        <td><a href="{% url 'update_model' pk=i.pk %}">Edit</a>
+    </tr>
+    {% endfor %}
+</table>
+{% else %}
+<p>There are no data entries, please create a new item.</p>
+
+{% endif %}
+
+<a href="{% url 'create_model' %}" class='btn btn-primary'>New Item</a>
+
+{% else %}
+  <p>You are not logged in</p>
+  <a href="{% url 'login' %}">Log In</a>
+{% endif %}
