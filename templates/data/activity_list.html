@@ -1,0 +1,83 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block content %}
+<div class="container">
+  <h1>Parent Activities</h1>
+</div>
+
+<div class="container">
+  <div class="row">
+    <div class="col-6">
+      <a href="{% url 'activity_new' %}" class='btn btn-primary'>Add New Item</a>
+    </div>
+    <div class="col-6 text-end">
+      <a href="{% url 'dataset_list' %}" class='btn btn-secondary'>Return to Datasets</a>
+    </div>
+  </div>
+</div>
+
+<div class="container">
+{% if object_list %}
+<table class="table table-striped">
+  <thead>
+    <tr>
+        <th>pk</th>   
+        <th>Activity</th> 
+        <th>Dataset</th> 
+        <th>Created By</th>
+        <th>Created At</th>
+
+        <th>Protocol</th>
+        <th>Task</th>
+        <th>Location</th>
+        <th>Updated By</th>
+        <th>Effective Date</th>
+        <th>Active Status</th>
+        <th>Publish Status</th>
+
+        <th>Survey Date</th>
+        <th>Species</th>
+        <th>Surveyors</th>
+        <th>Survey Type</th>
+        <th>Survey Method</th>
+
+        <th>Edit</th>
+        <th>Delete</th>
+    </tr>
+  </thead>
+  <tbody>
+    {% for i in object_list %}
+    <tr>
+        <td>{{ i.pk }}</td>
+        <td>{{ i.activity.id }}</td>
+        <td>{{ i.activity.dataset.name }}</td>
+        <td>{{ i.activity.created_by }}</td>
+        <td>{{ i.activity.created_at }}</td>
+
+        <td>{{ i.protocol }}</td>
+        <td>{{ i.task }}</td>
+        <td>{{ i.location }}</td>
+        <td>{{ i.updated_by }}</td>
+        <td>{{ i.effective_date }}</td>
+        <td>{{ i.active_status }}</td>
+        <td>{{ i.publish_status }}</td>
+
+        <td>{{ i.survey_date }}</td>   
+        <td>{{ i.species }}</td>
+        <td>{{ i.surveyors }}</td>
+        <td>{{ i.survey_type }}</td> 
+        <td>{{ i.survey_method }}</td> 
+
+        <td><a href="{% url 'activity_edit' pk=i.pk %}">Edit</a></td>
+        <td><a href="{% url 'activity_edit' pk=i.pk %}">Delete</a></td>
+    </tr>
+  </tbody>
+    {% endfor %}
+</table>
+{% else %}
+<p>There are no data entries, please create a new activity.</p>
+{% endif %}
+
+</div>
+{% endblock %}
