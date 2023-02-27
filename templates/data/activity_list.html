@@ -9,10 +9,7 @@
 <div class="container">
   <div class="row">
     <div class="col-6">
-      <a href="{% url 'activity_new' %}" class='btn btn-primary'>Add New Item</a>
-    </div>
-    <div class="col-6 text-end">
-      <a href="{% url 'dataset_list' %}" class='btn btn-secondary'>Return to Datasets</a>
+      <a href="{% url 'data:create_activity' %}" class='btn btn-primary'>Add New Item</a>
     </div>
   </div>
 </div>
@@ -69,8 +66,8 @@
         <td>{{ i.survey_type }}</td> 
         <td>{{ i.survey_method }}</td> 
 
-        <td><a href="{% url 'activity_edit' pk=i.pk %}">Edit</a></td>
-        <td><a href="{% url 'activity_edit' pk=i.pk %}">Delete</a></td>
+        <td><a href="{% url 'update_activity' pk=i.pk %}">Edit</a></td>
+        <td><a href="{% url 'update_activity' pk=i.pk %}">Delete</a></td>
     </tr>
   </tbody>
     {% endfor %}

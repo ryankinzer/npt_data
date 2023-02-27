@@ -41,6 +41,7 @@ INSTALLED_APPS = [
 
 
     'data',
+    'datasets',
     'locations',
 ]
 

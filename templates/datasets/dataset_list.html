@@ -1,0 +1,53 @@
+<!-- datasets/dataset_list.html -->
+{% extends "base.html" %}
+
+
+{% block content %}
+<div class="container">
+    {% if user.is_authenticated %}
+        <div class="container text-center">
+            <h4>Hello {{user.username }}!</h4>
+            <p><a href="{% url 'logout' %}">Log Out</a></p>
+        </div>
+    <div class="card">
+        <div class="card-header card-header-secondary">
+            <h4 class="card-title">Datasets</h4>
+        </div>
+        {% if datasets %}
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <th>Dataset Id</th>
+                    <th>Name</th>
+                    <th>Actions</th>
+                </tr>
+            </thead >
+            <tbody>
+                {% for dataset in datasets %}
+                <tr>
+                    <td>{{ dataset.id }}</td>
+                    <td>{{ dataset.name }}</td>
+                    <td>
+                        <a class="btn btn-primary" href="{% url 'data:list_activities' %}">View Data</a>
+                        <a class="btn btn-secondary" href="{% url 'datasets:update_dataset' dataset.id %}">Edit Dataset</a>
+                    </td>    
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+        {% else %}
+            <p>There are no data entries, please create a new item.</p>
+        {% endif %}
+    </div>
+        <div class="card-footer">
+            <a class="btn btn-primary" href="{% url 'datasets:create_dataset' %}">Add more datasets</a>
+        </div>
+    </div>
+    {% else %}
+        <div class="container text-center">
+            <p>Please login to view data.</p>
+            <a class="btn btn-primary" href="{% url 'login' %}">Log In</a>
+        </div>
+{% endif %}   
+</div>
+{% endblock content %}

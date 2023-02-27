@@ -1,26 +1,6 @@
-from django.forms import ModelForm
-from .models import Dataset, Protocol, Task, Activity, Parent, Child1, Child2
-
-
-class DatasetForm(ModelForm):
-    class Meta:
-        model = Dataset
-        fields = ['name', 'description']
-
-class ProtocolForm(ModelForm):
-    class Meta:
-        model = Protocol
-        fields = ['name', 'description', 'date_started', 'date_ended', 'url']
-
-class TaskForm(ModelForm):
-    class Meta:
-        model = Task
-        fields = ['name']
-
-class ActivityForm(ModelForm):
-    class Meta:
-        model = Activity
-        fields = ['dataset']
+from django import forms
+from django.forms import ModelForm, inlineformset_factory
+from .models import Parent, Child1, Child2
 
 class ParentForm(ModelForm):
     class Meta:

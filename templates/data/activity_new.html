@@ -1,11 +1,38 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block content %}
 <div class="container">
 	<h1>New Model Form</h1>
+	<ul class="nav nav-tabs">
+		<li class="nav-item">
+		  <a class="nav-link active" aria-current="page" href="#">Active</a>
+		</li>
+		<li class="nav-item">
+		  <a class="nav-link" href="#">Link</a>
+		</li>
+		<li class="nav-item">
+		  <a class="nav-link" href="#">Link</a>
+		</li>
+		<li class="nav-item">
+		  <a class="nav-link disabled" href="#" tabindex="-1" aria-disabled="true">Disabled</a>
+		</li>
+	  </ul>
 	<form method="POST">
 		{% csrf_token %}
+		<div class="container">
         {% if activity_form %}
 		    {{ activity_form.as_p }}
         {% endif %}
-        {{ parent_form.as_p }}
+		</div>
+		<div class="container">
+        	{{ parent_form.as_p }}
+		</div>
+		<div class="container">
+			{{ child1_form.as_p }}
+			{{ child2_form.as_p }}
+		<div class="container">
 		<button class="btn btn-primary">Post</button>
 	</form>
 </div>
+{% endblock %}
