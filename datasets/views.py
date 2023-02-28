@@ -1,12 +1,11 @@
-from django.shortcuts import render
 
 # Create your views here.
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib import messages
-from django.views.generic import ListView
+from django.views.generic import ListView, DetailView
 from django.views.generic.edit import CreateView, UpdateView
 
-from .forms import DatasetForm, DatasetModelFormSet
+from .forms import DatasetForm, DatasetModelFormSet, DatasetFieldFormSet
 
 from .models import Dataset, DatasetModel
  
@@ -96,3 +95,19 @@ def delete_model(request, pk):
             request, 'Image deleted successfully'
             )
     return redirect('datasets:update_dataset', pk=model.dataset.id)
+
+def update_fields(request, pk):
+    model = get_object_or_404(DatasetModel, pk=pk)
+    # model = DatasetModel.objects.get(pk=pk)
+    if request.method == 'POST':
+        formset = DatasetFieldFormSet(request.POST, instance=model, prefix='fields')
+        
+        if formset.is_valid():
+            formset.save(commit=True)
+            return redirect('datasets:update_dataset', pk=model.dataset.id)
+        
+    formset = DatasetFieldFormSet(instance=model, prefix='fields')
+
+    context = {'model':model, 'formset':formset}
+    return render(request, "datasets/model_detail.html", context)
+

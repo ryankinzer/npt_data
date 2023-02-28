@@ -1,0 +1,108 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="container">
+    <h2>{{ model.dataset.name }}</h2>
+</div>
+
+    <form class="container" enctype="multipart/form-data" method="post" id="field_form">
+        {% csrf_token %}
+        <div class="table-responsive card mt-4">
+                <div class="card-header card-header-secondary">
+                    <h4 class="card-title">{{model.model_name}}</h4>
+                </div>
+            
+            {{ formset.management_form }}
+
+            <script type="text/html" id="fields-template">  // id="inlineformsetname-template"
+                // id='inlineformsetname-__prefix__' 
+                <tr id="fields-__prefix__" class= hide_all>
+                    {% for fields in formset.empty_form.hidden_fields %}
+                        {{ fields }}
+                    {% endfor %}
+                
+                    {% for fields in formset.empty_form.visible_fields %}
+                        <td>{{fields}}</td>
+                    {% endfor %}
+                </tr>
+            </script>
+
+
+            {% for hidden in formset.hidden_fields %}
+                {{ hidden }}
+            {% endfor %}
+
+            <table class="table card-body">
+                <thead class="text-secondary">
+                    {% for form in formset.forms %}
+                        {% if forloop.first %}
+                            {% for field in form.visible_fields %}
+                                <th>
+                                    {{ field.label }}
+                                    {% if field.field.required %}
+                                        <span style="color: red;" class="required">*</span>
+                                    {% endif %}
+                                </th>
+                            {% endfor %}
+                        {% endif %}
+                </thead>
+                <tbody id="item-fields">
+                    <tr>
+                        {% for field in form %}
+                            <td>{{ field }}</td>
+                        {% endfor %}
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+            <a href="#" id="add-fields-button" class="btn btn-primary add-fields">Add Fields</a> <!-- id="add-inlineformsetname-button" -->
+        </div>
+        
+        <div class="form-group d-grid gap-2 pt-5">
+            <button type="submit" class="btn btn-success btn-block">Save Fields</button>
+        </div>
+
+    </form>
+
+    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+
+    <script>
+        $(document).ready(function() {
+          // when user clicks add more btn of variants
+            $('.add-fields').click(function(ev) {
+                ev.preventDefault();
+                var count = $('#item-fields').children().length;
+                var tmplMarkup = $('#fields-template').html();
+                var compiledTmpl = tmplMarkup.replace(/__prefix__/g, count);
+                $('#item-fields').append(compiledTmpl);
+        
+                // update form count
+                $('#id_fields-TOTAL_FORMS').attr('value', count+1);
+            });
+        });
+      </script>
+
+    {% comment %} <script>
+        let birdForm = document.querySelectorAll(".item-fields")
+        let container = document.querySelector("#field_form")
+        let addButton = document.querySelector("#add-form")
+        let totalForms = document.querySelector("#id_form-TOTAL_FORMS")
+
+        let formNum = birdForm.length-1
+        addButton.addEventListener('click', addForm)
+
+        function addForm(e){
+            e.preventDefault()
+
+            let newForm = birdForm[0].cloneNode(true)
+            let formRegex = RegExp(`form-(\\d){1}-`,'g')
+
+            formNum++
+            newForm.innerHTML = newForm.innerHTML.replace(formRegex, `form-${formNum}-`)
+            container.insertBefore(newForm, addButton)
+            
+            totalForms.setAttribute('value', `${formNum+1}`)
+        }
+    </script> {% endcomment %}
+
+{% endblock %}

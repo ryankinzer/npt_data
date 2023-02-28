@@ -53,12 +53,12 @@ class DatasetModel(models.Model):
     model_name = models.CharField(max_length=100)
     parent_model = models.BooleanField(default=False)
     def __str__(self):
-        return self.dataset.name
+        return self.model_name #dataset.name
     
 class DatasetField(models.Model):
-    dataset_model = models.ForeignKey(DatasetModel, on_delete=models.CASCADE)
+    dataset_model = models.ForeignKey(DatasetModel, on_delete=models.CASCADE, null=True)
     field_name = models.CharField(max_length=100)
-    description = models.TextField(blank=True, null=True)
+    description = models.CharField(max_length = 255, blank=True, null=True)
     units = models.CharField(max_length=2)
     data_type = models.CharField(max_length=20)
     form_type = models.CharField(max_length=20)

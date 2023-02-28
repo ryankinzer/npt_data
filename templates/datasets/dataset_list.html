@@ -17,19 +17,21 @@
         <table class="table table-striped">
             <thead>
                 <tr>
-                    <th>Dataset Id</th>
+                    {% comment %} <th>Dataset Id</th> {% endcomment %}
                     <th>Name</th>
+                    <th>Description</th>
                     <th>Actions</th>
                 </tr>
             </thead >
             <tbody>
                 {% for dataset in datasets %}
                 <tr>
-                    <td>{{ dataset.id }}</td>
+                    {% comment %} <td>{{ dataset.id }}</td> {% endcomment %}
                     <td>{{ dataset.name }}</td>
+                    <td>{{ dataset.description }}</td>
                     <td>
-                        <a class="btn btn-primary" href="{% url 'data:list_activities' %}">View Data</a>
-                        <a class="btn btn-secondary" href="{% url 'datasets:update_dataset' dataset.id %}">Edit Dataset</a>
+                        <a class="btn btn-success" href="{% url 'data:list_activities' %}">View Data</a>
+                        <a class="btn btn-primary" href="{% url 'datasets:update_dataset' dataset.id %}">Edit Dataset</a>
                     </td>    
                 </tr>
                 {% endfor %}
@@ -39,10 +41,10 @@
             <p>There are no data entries, please create a new item.</p>
         {% endif %}
     </div>
-        <div class="card-footer">
-            <a class="btn btn-primary" href="{% url 'datasets:create_dataset' %}">Add more datasets</a>
-        </div>
+    <div class="d-grid gap-2 pt-5">
+        <a class="btn btn-primary " href="{% url 'datasets:create_dataset' %}">Add Datasets</a>
     </div>
+
     {% else %}
         <div class="container text-center">
             <p>Please login to view data.</p>

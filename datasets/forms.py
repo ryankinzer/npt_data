@@ -26,7 +26,7 @@ class DatasetModelForm(forms.ModelForm):
 
     class Meta:
         model = DatasetModel
-        fields = '__all__'
+        fields = ('model_name', 'parent_model')
 
 DatasetModelFormSet = inlineformset_factory(
     Dataset, DatasetModel, form=DatasetModelForm,
@@ -37,15 +37,18 @@ DatasetModelFormSet = inlineformset_factory(
 class DatasetFieldForm(ModelForm):
     class Meta:
         model = DatasetField
-        fields = ['field_name', 'description', 'units', 'data_type', 'form_type', 'validation', 'possible_values', 'order']
+        fields = ('field_name', 'description', 'units', 'data_type', 'form_type', 'validation', 'possible_values', 'order')
+        exclude = ('id', 'dataset_model',)
 
-DatasetFieldFormset = inlineformset_factory(
+DatasetFieldFormSet = inlineformset_factory(
     DatasetModel,
     DatasetField,
     form=DatasetFieldForm,
     extra=1,
     can_delete=True,
     can_delete_extra=True)
+
+
 
 class ProtocolForm(ModelForm):
     class Meta:
