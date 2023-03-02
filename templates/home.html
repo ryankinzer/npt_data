@@ -13,12 +13,26 @@
                 <div class="card-body">
                     <div class="row">
                         <div class="col">
-                            <a class="btn btn-primary" href="{% url 'datasets:list_datasets' %}">Create/Edit Datasets</a>
+                            <a class="btn btn-primary" href="{% url 'datasets:list_tasks' %}">Tasks</a>
                         </div>
                         <div class="col">
-                            <a class="btn btn-primary" href="{% url 'datasets:list_datasets' %}">Enter/Edit Data</a>
+                            <a class="btn btn-primary" href="{% url 'datasets:list_datasets' %}">Datasets</a>
+                        </div>
+                        <div class="col">
+                            <a class="btn btn-primary" href="{% url 'datasets:list_protocols' %}">Protocols</a>
+                        </div>
+                        <div class="col">
+                            <a class="btn btn-primary" href="{% url 'datasets:list_datasets' %}">Data</a>
                         </div>
                     </div>
+                    {% comment %} <div class="row">
+                        <div class="col">
+                            <a class="btn btn-primary" href="{% url 'datasets:list_locations' %}">Locations</a>
+                        </div>
+                        <div class="col">
+                            <a class="btn btn-primary" href="{% url 'datasets:list_tasks' %}">Tasks</a>
+                        </div>
+                    </div> {% endcomment %}
                 </div>
             </div>
         {% else %}

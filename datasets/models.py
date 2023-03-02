@@ -4,40 +4,15 @@ from django.urls import reverse
 from locations.models import Location
 
 # Create your models here.
-class Product(models.Model):
-    title = models.CharField(max_length=150)
-    short_description = models.TextField(max_length=100)
-
-    def __str__(self):
-        return self.title
-
-
-class Image(models.Model):
-    product = models.ForeignKey(
-        Product, on_delete=models.CASCADE, null=True
-        )
-    image = models.ImageField(blank=True, upload_to='images')
-
-    def __str__(self):
-        return self.product.title
-
-
-class Variant(models.Model):
-    product = models.ForeignKey(
-        Product, on_delete=models.CASCADE
-        )
-    size = models.CharField(max_length=100)
-    quantity = models.PositiveIntegerField(default=1)
-    price = models.DecimalField(max_digits=12, decimal_places=2)
-
-    def __str__(self):
-        return self.product.title
     
 # Task should be imported from other app
 class Task(models.Model):
     name = models.CharField(max_length=100)
     def __str__(self):
         return self.name
+    
+    def get_absolute_url(self):
+        return reverse('datasets:list_tasks')
 
 # Dataset Metadata
 
@@ -68,18 +43,19 @@ class DatasetField(models.Model):
 
     def __str__(self):
         return self.field_name
-    
-    def get_absolute_url(self):
-        return reverse('dataset_list')
 
 class Protocol(models.Model):
     name = models.CharField(max_length=100)
     description = models.TextField(blank=True, null=True)
     date_started = models.DateField()
     date_ended = models.DateField(blank=True, null=True)
-    url = models.CharField(max_length=255, blank=True, null=True)
+    url = models.URLField(max_length=255, blank=True, null=True)
+    
     def __str__(self):
         return self.name
+    
+    def get_absolute_url(self):
+        return reverse('datasets:list_protocols')
 
 
 # Dataset Auditting

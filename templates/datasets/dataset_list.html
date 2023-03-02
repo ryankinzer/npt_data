@@ -14,7 +14,7 @@
             <h4 class="card-title">Datasets</h4>
         </div>
         {% if datasets %}
-        <table class="table table-striped">
+        <table class="table card-body">
             <thead>
                 <tr>
                     {% comment %} <th>Dataset Id</th> {% endcomment %}
@@ -29,20 +29,18 @@
                     {% comment %} <td>{{ dataset.id }}</td> {% endcomment %}
                     <td>{{ dataset.name }}</td>
                     <td>{{ dataset.description }}</td>
-                    <td>
-                        <a class="btn btn-success" href="{% url 'data:list_activities' %}">View Data</a>
-                        <a class="btn btn-primary" href="{% url 'datasets:update_dataset' dataset.id %}">Edit Dataset</a>
-                    </td>    
+                    <td><a class="btn btn-success" href="{% url 'data:view_activities' dataset.id %}">View Data</a></td>    
+                    <td><a class="btn btn-primary" href="{% url 'datasets:update_dataset' dataset.id %}">Edit Dataset</a></td>    
                 </tr>
                 {% endfor %}
             </tbody>
         </table>
+        <div class="card-footer d-grid gap-2">
+            <a class="btn btn-primary " href="{% url 'datasets:create_dataset' %}">Add Datasets</a>
+        </div>
         {% else %}
             <p>There are no data entries, please create a new item.</p>
         {% endif %}
-    </div>
-    <div class="d-grid gap-2 pt-5">
-        <a class="btn btn-primary " href="{% url 'datasets:create_dataset' %}">Add Datasets</a>
     </div>
 
     {% else %}

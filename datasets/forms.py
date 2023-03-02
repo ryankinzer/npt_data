@@ -9,18 +9,9 @@ class DatasetForm(forms.ModelForm):
     class Meta:
         model = Dataset
         fields = '__all__'
-        widgets = {
-            'name': forms.TextInput(
-                attrs={
-                    'class': 'form-control'
-                    }
-                ),
-            'description': forms.TextInput(
-                attrs={
-                    'class': 'form-control'
-                    }
-                ),
-        }
+        widgets = {'name': forms.TextInput(attrs={'class': 'form-control'}),
+            'description': forms.Textarea(attrs={'class': 'form-control'}),
+            }
 
 class DatasetModelForm(forms.ModelForm):
 
@@ -49,16 +40,25 @@ DatasetFieldFormSet = inlineformset_factory(
     can_delete_extra=True)
 
 
-
 class ProtocolForm(ModelForm):
     class Meta:
         model = Protocol
-        fields = ['name', 'description', 'date_started', 'date_ended', 'url']
+        fields = '__all__'#('name', 'description', 'date_started', 'date_ended', 'url')
+        widgets = {
+            'name': forms.TextInput(attrs={'class': 'form-control'}),
+            'description': forms.Textarea(attrs={'class': 'form-control'}),
+            'date_started': forms.DateInput(format=('%Y-%m-%d'), attrs={'class': 'form-control', 'placeholder': 'Select a date', 'type': 'date'}),
+            'date_ended': forms.DateInput(format=('%Y-%m-%d'), attrs={'class': 'form-control', 'placeholder': 'Select a date', 'type': 'date'}),
+            'url': forms.URLInput(attrs={'class': 'form-control', 'placeholder': 'https://someplace.com'}),
+            }
 
 class TaskForm(ModelForm):
     class Meta:
         model = Task
-        fields = ['name']
+        fields = ('name',)
+        widgets = {
+            'name': forms.TextInput(attrs={'class': 'form-control'}),
+            }        
 
 class ActivityForm(ModelForm):
     class Meta:

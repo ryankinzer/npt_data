@@ -1,0 +1,17 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block content %}
+<div class="container">
+  <h1>Parent Activities</h1>
+
+  {% for model in models %}
+  <p>{{ model.model_name }}</p>
+  {% endfor %}
+
+  {% for field in fields %}
+  <p>{{ field.field_name }}</p>
+  {% endfor %}
+
+</div>
+{% endblock %}

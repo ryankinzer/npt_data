@@ -4,11 +4,17 @@ from django.views.generic.edit import CreateView, UpdateView
 from django.views.generic import ListView
 
 from .models import Parent
+from datasets.models import DatasetModel, DatasetField
 from datasets.forms import ActivityForm
 from .forms import  ParentForm, Child1Form, Child2Form
 
 
 # Activities
+
+def activity_view(request, pk):
+    models = DatasetModel.objects.filter(dataset = pk, parent_model=True)
+    context = {'models':models}
+    return render(request, "data/dataset_activities.html", context)
 
 class ActivityListView(ListView):
     model = Parent

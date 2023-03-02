@@ -1,0 +1,33 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<form enctype="multipart/form-data" class="container" method="post" id="protocol_form">
+    {% csrf_token %}
+    <!-- main form start --- in our case product form -->
+    <div class="card">
+        <div class="card-header card-header-secondary">
+            <h4 class="card-title">{{ model_name }} </h4>
+        </div>
+        {% for field in form %}
+            <div class="form-group card-body">
+                {% if field.field.required %}
+                    <span style="color: red;" class="required">*</span>
+                {% endif %}
+                <label>{{field.label}}</label>
+            
+                {{field}}
+                {% if field.help_text %}
+                    <small style="color: grey">{{ field.help_text }}</small>
+                {% endif %}
+                {% for error in field.errors %}
+                    <p style="color: red">{{ error }}</p>
+                {% endfor %}
+            </div>
+        {% endfor %}
+    </div>
+    <div class="form-group d-grid gap-2 pt-5">
+        <button type="submit" class="btn btn-success btn-block">Save {{ model_name }}</button>
+    </div>
+</form>
+{% endblock %}

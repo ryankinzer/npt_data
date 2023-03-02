@@ -5,10 +5,13 @@ from django.contrib import messages
 from django.views.generic import ListView, DetailView
 from django.views.generic.edit import CreateView, UpdateView
 
-from .forms import DatasetForm, DatasetModelFormSet, DatasetFieldFormSet
+from .forms import DatasetForm, DatasetModelFormSet, DatasetFieldFormSet, ProtocolForm, TaskForm
 
-from .models import Dataset, DatasetModel
+from .models import Dataset, DatasetModel, Protocol, Task
  
+def home(request):
+    return render(request, 'home.html', {})
+
 # Dataset Views
 
 class DatasetInline():
@@ -110,4 +113,68 @@ def update_fields(request, pk):
 
     context = {'model':model, 'formset':formset}
     return render(request, "datasets/model_detail.html", context)
+
+class ProtocolList(ListView):
+    model = Protocol
+    template_name = 'datasets/protocol_list.html'
+    context_object_name = 'list'
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['model_name'] = self.model.__name__
+        return context
+
+class ProtocolCreate(CreateView):
+    model = Protocol
+    form_class = ProtocolForm
+    template_name = 'datasets/protocol_create_or_update.html'
+    context_object_name = 'form'
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['model_name'] = self.model.__name__
+        return context
+
+class ProtocolUpdate(UpdateView):
+    model = Protocol
+    form_class = ProtocolForm
+    template_name = 'datasets/protocol_create_or_update.html'
+    context_object_name = 'form'
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['model_name'] = self.model.__name__
+        return context
+
+class TaskList(ListView):
+    model = Task
+    template_name = 'datasets/task_list.html'
+    context_object_name = 'list'
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['model_name'] = self.model.__name__
+        return context
+
+class TaskCreate(CreateView):
+    model = Task
+    form_class = TaskForm
+    template_name = 'datasets/protocol_create_or_update.html'
+    context_object_name = 'form'
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['model_name'] = self.model.__name__
+        return context
+
+class TaskUpdate(UpdateView):
+    model = Task
+    form_class = TaskForm
+    template_name = 'datasets/protocol_create_or_update.html'
+    context_object_name = 'form'
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['model_name'] = self.model.__name__
+        return context
 
