@@ -1,5 +1,5 @@
 from django import forms
-from django.forms import ModelForm, inlineformset_factory
+from django.forms import ModelForm
 from .models import Parent, Child1, Child2
 
 class ParentForm(ModelForm):
@@ -10,9 +10,10 @@ class ParentForm(ModelForm):
 class Child1Form(ModelForm):
     class Meta:
         model = Child1
-        fields = ['feature', 'count', 'wpt_name', 'lat', 'long']
+        fields = ['feature_type', 'count', 'wpt_name', 'lat', 'long']
 
 class Child2Form(ModelForm):
     class Meta:
         model = Child2
         fields = ['sample_id', 'sex', 'fork_length', 'lat', 'long']
+

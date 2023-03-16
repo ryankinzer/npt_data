@@ -1,26 +1,51 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib import messages
+from django.apps import apps
+import requests
 from django.views.generic.edit import CreateView, UpdateView
 from django.views.generic import ListView
 
-from .models import Parent
-from datasets.models import DatasetModel, DatasetField
+from data.models import Parent
+from datasets.models import Activity, DatasetModel, DatasetField
 from datasets.forms import ActivityForm
 from .forms import  ParentForm, Child1Form, Child2Form
 
 
 # Activities
 
+# class ActivityListView(ListView):
+#     model = Activity
+#     template_name = 'data/activity_list.html'
+
 def activity_view(request, pk):
-    models = DatasetModel.objects.filter(dataset = pk, parent_model=True)
-    context = {'models':models}
+    dataset = DatasetModel.objects.get(dataset = pk, parent_model=True)
+    model= apps.get_model(app_label='data', model_name = dataset.model_name)
+    fields = model._meta.get_fields()
+    # activities = model.objects.all()
+    activities = model.objects.values()
+    context = {'dataset':dataset,'fields':fields, 'activities':activities}
     return render(request, "data/dataset_activities.html", context)
 
-class ActivityListView(ListView):
-    model = Parent
-    template_name = 'data/activity_list.html'
+def activity_new(request, pk):
+    models = DatasetModel.objects.filter(dataset = pk)
 
-def activity_new(request):
+    if request.method == 'POST':
+        activity_form = ActivityForm(request.POST)
+        if activity_form.is_valid():
+            activity=activity_form.save(commit=False)
+            activity.created_by = request.user
+            activity.dataset = pk
+            activity.save()
+
+            return redirect('data:view_activities')
+        
+    activity_form = ActivityForm(request.POST)
+            
+    context = {'models':models, 'activity_form':activity_form}
+    return render(request, "data/activity_create_or_update.html",context)
+
+
+def activity_create(request):
     if request.method == 'POST':
         activity_form = ActivityForm(request.POST)
         parent_form = ParentForm(request.POST)
@@ -37,16 +62,18 @@ def activity_new(request):
             parent.save()
 
             child1=child1_form.save(commit=False)
-            child1.parent = parent
+            child1.activity = activity
             child1.updated_by = request.user
+            child1.row_id = 1
             child1.save()
 
             child2=child2_form.save(commit=False)
-            child2.parent = parent
+            child2.activity = activity
             child2.updated_by = request.user
+            child2.row_id = 1
             child2.save()
 
-            return redirect('activity_list')
+            return redirect('data:view_activities')
 
     activity_form = ActivityForm(request.POST)
     parent_form = ParentForm(request.POST)
@@ -79,7 +106,7 @@ def activity_edit(request, pk):
             child2.pk = None
             child2.save()
             
-            return redirect('activity_list')
+            return redirect('data:activity_list')
 
     parent_form = ParentForm(instance=parent)
     child1_form = Child1Form(instance=child1)

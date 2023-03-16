@@ -3,15 +3,57 @@
 
 {% block content %}
 <div class="container">
-  <h1>Parent Activities</h1>
-
-  {% for model in models %}
-  <p>{{ model.model_name }}</p>
-  {% endfor %}
-
-  {% for field in fields %}
-  <p>{{ field.field_name }}</p>
-  {% endfor %}
-
+  <h1>{{ dataset.dataset.name }}: {{ dataset.dataset.id }}</h1>
 </div>
+
+<div class="container">
+  <div class="row">
+    <div class="col-6">
+      <a href="{% url 'data:new_activity' dataset.dataset.id %}" class='btn btn-success'>Add Dynamic New Activity</a>
+    </div>
+  </div>
+</div>
+
+</br>
+
+<div class="container">
+  <div class="row">
+    <div class="col-6">
+      <a href="{% url 'data:create_activity' %}" class='btn btn-primary'>Add New Activity</a>
+    </div>
+  </div>
+</div>
+
+{% if activities %}
+<div class="container">
+  <table class="table table-striped">
+    {% for instance in activities %}
+      {% if forloop.first %}
+      <thead>
+        <tr>
+          {% for key, value in instance.items%}
+            <th>{{ key }}</th>
+          {% endfor %}
+            <th>Edit</th>
+            <th>Delete</th>
+          </th>
+        </tr>
+      </thead>
+      {% endif %}
+      <tbody>
+        <tr>
+          {% for key, value in instance.items %}
+            <td>{{ value }}</td>
+          {% endfor %}
+          <td><a href="{% url 'data:update_activity' pk=instance.id %}">Edit</a></td>
+          <td><a href="{% url 'data:update_activity' pk=instance.id %}">Delete</a></td>
+        </tr>
+      </tbody>
+    {% endfor %}
+  </table>
+  {% else %}
+    <p>There are no data entries, please create a new activity.</p>
+  {% endif %}
+</div>
+
 {% endblock %}

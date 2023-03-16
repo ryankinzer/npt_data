@@ -1,7 +1,7 @@
 from django.db import models
 from django.contrib.auth.models import User
 from django.urls import reverse
-from datasets.models import AuditParent
+from datasets.models import AuditParent, AuditChild
 
 # Create your models here.
 
@@ -18,33 +18,15 @@ class Parent(AuditParent):
     #         if not self.pk: # if self.pk is blank...set created by to user
     #             self.updated_by = user
     #     super(Parent, self).save(*args, **kwargs)
+    
+    # def get_fields(self):
+    #         return [(field.verbose_name, field.value_from_object(self)) for field in self.__class__._meta.fields]
         
     def __str__(self):
-        return self.id
-    
-    def get_absolute_url(self):
-        return reverse('parent_list')
-
-class AuditChild(models.Model):
-    parent = models.ForeignKey(Parent, on_delete=models.CASCADE)
-    updated_by = models.ForeignKey(User, on_delete=models.SET_NULL, null=True)
-    effective_date = models.DateTimeField(auto_now=True)# updates the value when ever the record is saved/updated
-    active_status = models.CharField(max_length=10, choices=(("active", "Active"), ("inactive", "Inactive")), default="active")
-    row_id = models.IntegerField()
-
-    class Meta:
-        abstract = True
-        ordering = ('-parent', "-effective_date", "active_status")
-
-    def save(self, *args, **kwargs):
-        if not self.pk: # if pk is blank set status to active
-            self.active_status = "active"
-        super().save(*args, **kwargs)
-        self.__class__.objects.filter(parent_id=self.parent_id, active_status="active", row_id=self.row_id).exclude(effective_date=self.effective_date).update(active_status="inactive")
-
+        return str(self.id)
 
 class Child1(AuditChild):
-    feature = models.CharField(max_length=25, choices=(("Redd","Redd"), ("Live Fish", "Live Fish")), default="Redd")
+    feature_type = models.CharField(max_length=25, choices=(("Redd","Redd"), ("Live Fish", "Live Fish")), default="Redd")
     count = models.IntegerField()
     wpt_name = models.CharField(max_length = 10)
     lat = models.CharField(max_length=20, blank = True, null=True)
@@ -56,3 +38,17 @@ class Child2(AuditChild):
     fork_length = models.IntegerField()
     lat = models.CharField(max_length=20, blank = True, null=True)
     long = models.CharField(max_length=20, blank = True, null=True)
+
+
+class TrapHeader(AuditParent):
+    trap_date = models.DateField()
+
+    def __str__(self):
+        return str(self.id)
+    
+class TrapDetail(AuditChild):
+    species = models.CharField(max_length=30)
+
+    def __str__(self):
+        return str(self.id)
+

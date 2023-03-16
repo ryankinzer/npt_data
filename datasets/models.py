@@ -73,7 +73,7 @@ class Activity(models.Model):
         super(Activity, self).save(*args, **kwargs)
         
     def __str__(self):
-        return self.status
+        return str(self.id)  
 
 class AuditParent(models.Model):
     activity = models.ForeignKey(Activity, on_delete=models.CASCADE)
@@ -97,3 +97,22 @@ class AuditParent(models.Model):
             self.active_status = "active"
         super().save(*args, **kwargs)
         self.__class__.objects.filter(activity_id=self.activity_id, active_status="active").exclude(effective_date=self.effective_date).update(active_status="inactive")
+
+
+class AuditChild(models.Model):
+    activity = models.ForeignKey(Activity, on_delete=models.CASCADE)
+    updated_by = models.ForeignKey(User, on_delete=models.SET_NULL, null=True)
+    effective_date = models.DateTimeField(auto_now=True)# updates the value when ever the record is saved/updated
+    active_status = models.CharField(max_length=10, choices=(("active", "Active"), ("inactive", "Inactive")), default="active")
+    row_id = models.IntegerField()
+
+    class Meta:
+        abstract = True
+        ordering = ('-activity', "-effective_date", "active_status")
+
+    def save(self, *args, **kwargs):
+        if not self.pk: # if pk is blank set status to active
+            self.active_status = "active"
+        super().save(*args, **kwargs)
+        self.__class__.objects.filter(activity_id=self.activity_id, active_status="active", row_id=self.row_id).exclude(effective_date=self.effective_date).update(active_status="inactive")
+

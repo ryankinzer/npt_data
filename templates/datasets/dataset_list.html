@@ -35,12 +35,12 @@
                 {% endfor %}
             </tbody>
         </table>
-        <div class="card-footer d-grid gap-2">
-            <a class="btn btn-primary " href="{% url 'datasets:create_dataset' %}">Add Datasets</a>
-        </div>
         {% else %}
             <p>There are no data entries, please create a new item.</p>
         {% endif %}
+        <div class="card-footer d-grid gap-2">
+            <a class="btn btn-primary " href="{% url 'datasets:create_dataset' %}">Add Datasets</a>
+        </div>
     </div>
 
     {% else %}

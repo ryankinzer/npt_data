@@ -14,4 +14,8 @@ admin.site.register(DatasetModel, DatasetModelAdmin)
 admin.site.register(DatasetField)
 admin.site.register(Protocol)
 admin.site.register(Task)
-admin.site.register(Activity)
+
+
+class ActivityAdmin(admin.ModelAdmin):
+    list_display = ("id", "dataset", "created_by", "created_at")
+admin.site.register(Activity, ActivityAdmin)
